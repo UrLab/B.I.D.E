@@ -10,8 +10,10 @@ def my_form():
     c = co.cursor()
 
     users = []
-    for vals in c.execute('SELECT * FROM users ORDER BY points'):
-        users.append((vals[0], vals[1]))
+    i = 1
+    for vals in c.execute('SELECT * FROM users ORDER BY points DESC'):
+        users.append(((vals[0], vals[1]), i))
+        i += 1
 
     co.close()
 
@@ -21,8 +23,7 @@ def my_form():
 @app.route('/jokes')
 def jokes():
     co = sqlite3.connect('users.db')
-
-    # c = co.cursor()
+    c = co.cursor()
 
     # Save (commit) the changes
     co.close()
@@ -30,20 +31,43 @@ def jokes():
     return render_template('jokes.html')
 
 
-@app.route("/adduser")
-def add_user():
-    return render_template('adduser.html')
-
-
 @app.route("/adduser", methods=['POST'])
 def insert_user():
     username = request.form.get("Name")
+    if username == "":
+        return redirect("/", code=302)
     print(type(username))
 
     # Connecting to the database and inserting the username
     co = sqlite3.connect("users.db")
     c = co.cursor()
     c.execute("INSERT INTO users VALUES (?, 0)", (username,))
+    co.commit()
+    co.close()
+
+    return redirect("/", code=302)
+
+
+@app.route("/ModPoints", methods=['GET'])
+def addPoints():
+    user = request.args.get('user')
+    action = request.args.get('action')
+
+    co = sqlite3.connect("users.db")
+    c = co.cursor()
+
+    base_points = c.execute("SELECT points FROM users WHERE nom=?", (user,))
+
+    if action == "plus":
+        base_points = base_points.fetchall()[0][0]+1
+    elif action == "moins":
+        base_points = base_points.fetchall()[0][0]-1
+    else:
+        co.close()
+        return redirect("/", code=302)
+
+    c.execute(
+        "UPDATE users SET points=? where nom=?", (base_points, user))
     co.commit()
     co.close()
 

@@ -19,6 +19,11 @@
         .pub img {
             width: 100%;
         }
+
+        .trash{
+            color: red;
+            text-decoration: none;
+        }
     </style>
 </head>
 
@@ -39,20 +44,24 @@
                     <li class="active"><a href="/">Home</a></li>
                     <li><a href="/jokes">Les blagues hors contexte</a></li>
                 </ul>
-                <ul class="nav navbar-nav navbar-right">
+                <ul class="nav navbar-nav navbar-right" style="margin-top: 6px">
                     <li>
                         <div class="btn-group">
                             <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <span class="glyphicon glyphicon-user"></span>
                                 Ajouter un idiot
                             </button>
-                            <form class="dropdown-menu p-4" method="POST" action="/adduser">
-                                <div class="form-group">
-                                    <label for="Nom">Pseudo</label>
-                                    <input type="text" class="form-control" id="Nom" name="Name" placeholder="Slowmolosse">
+                            <div class="dropdown-menu p-4 form-group">
+                                <div style="margin: 5%;">
+                                    <form method="POST" action="/adduser">
+                                        <div class="col-mb-12">
+                                            <label for="Nom">Pseudo</label>
+                                            <input type="text" class="form-control" id="Nom" name="Name" placeholder="Ex: Slowmolosse">
+                                        </div>
+                                        <button type="submit" class="btn btn-primary">Ajouter</button>
+                                    </form>
                                 </div>
-                                <button type="submit" class="btn btn-primary">Sign in</button>
-                            </form>
+                            </div>
                         </div>
                     </li>
             </div>
@@ -64,25 +73,17 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-2 well">
-                <div class="well">
-                    <h4 style="color: blue; text-decoration: underline;">Récompenses</h4>
-                    <p>Chaque mois, le numéro 1 peu gagneeeeeeeer....</p>
-                    <p>Le droit de bien aller se faire foutre !</p>
-                    <small>Tu pensais quoi ? qu'on allait offrir des trucs ?</small>
-                </div>
+                <h4 style="color: red; text-decoration: underline;">Récompenses</h4>
+                <p>Chaque mois, le numéro 1 peu gagneeeeeeeer....</p>
+                <p>Le droit de bien aller se faire foutre !</p>
+                <br/>
+                <small>Tu pensais quoi ? qu'on allait offrir des trucs ?</small>
             </div>
             <div class="col-sm-7">
 
                 <div class="row">
                     <div class="col-sm-12">
-                        <div class="panel panel-default text-left">
-                            <div class="panel-body">
-                                <p>Liste des bon blagueurs qu'on aime bien quand même</p>
-                                <button type="button" class="btn btn-default btn-sm">
-                                    <span class="glyphicon glyphicon-thumbs-up"></span> Like
-                                </button>
-                            </div>
-                        </div>
+                        <h3>Liste des bon blagueurs qu'on aime bien quand même</h3>
                     </div>
                 </div>
 
@@ -92,22 +93,34 @@
                             <tr>
                                 <th scope="col">#</th>
                                 <th scope="col">Nom de l'imbécile</th>
-                                <th scope="col">Nombre de points</th>
+                                <th scope="col" class="text-center">Nombre de points</th>
+                                <th scope="col"></th>
                             </tr>
                         </thead>
                         <tbody>
-                            {% for user in users %}
+                            {% for user, index in users %}
                             <tr>
-                                <th scope="row">1</th>
+                                <th scope="row">{{index}}</th>
                                 <td>
                                     {{user[0]}}
                                 </td>
                                 <td>
-                                    <p>
-                                        <a class="btn btn-primary">-</a>
-                                        {{user[1]}}
-                                        <a class="btn btn-primary">+</a>
-                                    </p>
+                                    <div class="col-sm-12">
+                                        <div class="col-sm-1">
+                                            <a href="/ModPoints?user={{user[0]}}&action=moins" class="btn btn-primary">-</a>
+                                        </div>
+                                        <div class="col-sm-9 text-center">
+                                            {{user[1]}}
+                                        </div>
+                                        <div class="col-sm-1">
+                                            <a href="/ModPoints?user={{user[0]}}&action=plus" class="btn btn-primary">+</a>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <a href="/removeUser/?user={{user[0]}}" class="trash">
+                                        <span class="glyphicon glyphicon-trash"></span>
+                                    </a>
                                 </td>
                             </tr>
                             {% endfor %}
@@ -119,10 +132,11 @@
                 <h4>Contenu sponsorisé</h4>
                 <div class="well pub">
                     <img src="{{ url_for('static', filename='img/evier.jpg') }}" alt="">
-                    <p>Les médecins la déteste ! Elle a perdu 20... <span style="color: blue;text-decoration: underline;">voir plus</span></p>
+                    <p>Les médecins la déteste ! Elle a perdu 20... <span style="color: blue;">voir plus</span></p>
                 </div>
                 <div class="well pub">
-                    <img src="{{ url_for('static', filename='img/Herve.jpg') }}" alt="">
+                    <img src="{{ url_for('static', filename='img/THUUUNE.jpg') }}" alt="">
+                    <p>Découvrez comment gagner plein d'argent en ligne ! <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">voir plus</a></p>
                 </div>
             </div>
         </div>
