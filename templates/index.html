@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>B.I.D.E.</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+    <style>
+        /* Set black background color, white text and some padding */
+        footer {
+            background-color: #555;
+            color: white;
+            padding: 15px;
+        }
+
+        .pub img {
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+
+                <a class="navbar-brand" href="/">B.I.D.E.</a>
+            </div>
+            <div class="collapse navbar-collapse" id="myNavbar">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="/">Home</a></li>
+                    <li><a href="/jokes">Les blagues hors contexte</a></li>
+                </ul>
+                <ul class="nav navbar-nav navbar-right">
+                    <li>
+                        <div class="btn-group">
+                            <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <span class="glyphicon glyphicon-user"></span>
+                                Ajouter un idiot
+                            </button>
+                            <form class="dropdown-menu p-4" method="POST" action="/adduser">
+                                <div class="form-group">
+                                    <label for="Nom">Pseudo</label>
+                                    <input type="text" class="form-control" id="Nom" name="Name" placeholder="Slowmolosse">
+                                </div>
+                                <button type="submit" class="btn btn-primary">Sign in</button>
+                            </form>
+                        </div>
+                    </li>
+            </div>
+            </ul>
+        </div>
+        </div>
+    </nav>
+
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-2 well">
+                <div class="well">
+                    <h4 style="color: blue; text-decoration: underline;">Récompenses</h4>
+                    <p>Chaque mois, le numéro 1 peu gagneeeeeeeer....</p>
+                    <p>Le droit de bien aller se faire foutre !</p>
+                    <small>Tu pensais quoi ? qu'on allait offrir des trucs ?</small>
+                </div>
+            </div>
+            <div class="col-sm-7">
+
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="panel panel-default text-left">
+                            <div class="panel-body">
+                                <p>Liste des bon blagueurs qu'on aime bien quand même</p>
+                                <button type="button" class="btn btn-default btn-sm">
+                                    <span class="glyphicon glyphicon-thumbs-up"></span> Like
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col">#</th>
+                                <th scope="col">Nom de l'imbécile</th>
+                                <th scope="col">Nombre de points</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for user in users %}
+                            <tr>
+                                <th scope="row">1</th>
+                                <td>
+                                    {{user[0]}}
+                                </td>
+                                <td>
+                                    <p>
+                                        <a class="btn btn-primary">-</a>
+                                        {{user[1]}}
+                                        <a class="btn btn-primary">+</a>
+                                    </p>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-sm-3 well">
+                <h4>Contenu sponsorisé</h4>
+                <div class="well pub">
+                    <img src="{{ url_for('static', filename='img/evier.jpg') }}" alt="">
+                    <p>Les médecins la déteste ! Elle a perdu 20... <span style="color: blue;text-decoration: underline;">voir plus</span></p>
+                </div>
+                <div class="well pub">
+                    <img src="{{ url_for('static', filename='img/Herve.jpg') }}" alt="">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="container-fluid text-center">
+        <p>Copyright - 2020 - Urlab</p>
+    </footer>
+
+</body>
+
+</html>
