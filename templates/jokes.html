@@ -39,112 +39,94 @@
                     <li><a href="/">Home</a></li>
                     <li class="active"><a href="/jokes">Les blagues hors contexte</a></li>
                 </ul>
-                <ul class="nav navbar-nav navbar-right">
-                    <li><a href="#"><span class="glyphicon glyphicon-user"></span> Ajouter un idiot</a></li>
+                <ul class="nav navbar-nav navbar-right" style="margin-top: 6px">
+                    <button type="button" class="btn btn-secondary dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="glyphicon glyphicon-tag"></span>
+                        Ajouter une blague
+                    </button>
+                    <div class="dropdown-menu p-4 form-group">
+                        <div style="margin: 5%;">
+                            <form method="POST" action="/addjoke">
+                                <div class="col-mb-12">
+                                    <label for="Joke">Blague :</label>
+                                    <textarea type="text" class="form-control" rows="5" id="Joke" name="Joke" placeholder="Ex: Slowmolosse est beau"></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-primary">Ajouter</button>
+                            </form>
+                        </div>
+                    </div>
                 </ul>
             </div>
         </div>
     </nav>
 
-    <div class="container text-center">
+    <div class="container">
         <div class="row">
-            <div class="col-sm-3 well">
-                <div class="well">
-                    <p><a href="#">My Profile</a></p>
-                    <img src="bird.jpg" class="img-circle" height="65" width="65" alt="Avatar">
-                </div>
-                <div class="alert alert-success fade in">
-                    <a href="#" class="close" data-dismiss="alert" aria-label="close">×</a>
-                    <p><strong>Ey!</strong></p>
-                    People are looking at your profile. Find out who.
-                </div>
-                <p><a href="#">Link</a></p>
-                <p><a href="#">Link</a></p>
-                <p><a href="#">Link</a></p>
+            <div class="col-sm-2 well">
+                <h4 style="color: red; text-decoration: underline;">Récompenses</h4>
+                <p>Chaque mois, le numéro 1 peu gagneeeeeeeer....</p>
+                <p>Le droit de bien aller se faire foutre !</p>
+                <br/>
+                <small>Tu pensais quoi ? qu'on allait offrir des trucs ?</small>
             </div>
             <div class="col-sm-7">
 
                 <div class="row">
                     <div class="col-sm-12">
-                        <div class="panel panel-default text-left">
-                            <div class="panel-body">
-                                <p contenteditable="true">Status: Feeling Blue</p>
-                                <button type="button" class="btn btn-default btn-sm">
-                                    <span class="glyphicon glyphicon-thumbs-up"></span> Like
-                                </button>
-                            </div>
-                        </div>
+                        <h3>Liste des bon blagueurs qu'on aime bien quand même</h3>
                     </div>
                 </div>
 
                 <div class="row">
-                    <div class="col-sm-3">
-                        <div class="well">
-                            <p>John</p>
-                            <img src="bird.jpg" class="img-circle" height="55" width="55" alt="Avatar">
-                        </div>
-                    </div>
-                    <div class="col-sm-9">
-                        <div class="well">
-                            <p>Just Forgot that I had to mention something about someone to someone about how I forgot something, but now I forgot it. Ahh, forget it! Or wait. I remember.... no I don't.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-3">
-                        <div class="well">
-                            <p>Bo</p>
-                            <img src="bandmember.jpg" class="img-circle" height="55" width="55" alt="Avatar">
-                        </div>
-                    </div>
-                    <div class="col-sm-9">
-                        <div class="well">
-                            <p>Just Forgot that I had to mention something about someone to someone about how I forgot something, but now I forgot it. Ahh, forget it! Or wait. I remember.... no I don't.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-3">
-                        <div class="well">
-                            <p>Jane</p>
-                            <img src="bandmember.jpg" class="img-circle" height="55" width="55" alt="Avatar">
-                        </div>
-                    </div>
-                    <div class="col-sm-9">
-                        <div class="well">
-                            <p>Just Forgot that I had to mention something about someone to someone about how I forgot something, but now I forgot it. Ahh, forget it! Or wait. I remember.... no I don't.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-sm-3">
-                        <div class="well">
-                            <p>Anja</p>
-                            <img src="bird.jpg" class="img-circle" height="55" width="55" alt="Avatar">
-                        </div>
-                    </div>
-                    <div class="col-sm-9">
-                        <div class="well">
-                            <p>Just Forgot that I had to mention something about someone to someone about how I forgot something, but now I forgot it. Ahh, forget it! Or wait. I remember.... no I don't.</p>
-                        </div>
-                    </div>
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th scope="col" colspan="1">#</th>
+                                <th scope="col" colspan="7">Blague</th>
+                                <th scope="col" colspan="3" class="text-center">Score</th>
+                                <th scope="col" colspan="1"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for joke, index in jokes %}
+                            <tr>
+                                <td colspan="1" scope="row">{{ index }}</td>
+                                <td colspan="7">
+                                    {{ joke[0] }}
+                                </td>
+                                <td colspan="3">
+                                    <div class="col-sm-12">
+                                        <div class="col-sm-2">
+                                            <a href="/vote?joke={{joke[2]}}&action=moins" class="btn btn-primary">-</a>
+                                        </div>
+                                        <div class="col-sm-8 text-center">
+                                            {{ joke[1] }}
+                                        </div>
+                                        <div class="col-sm-2">
+                                            <a href="/vote?joke={{joke[2]}}&action=plus" class="btn btn-primary">+</a>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td colspan="1">
+                                    <a href="/removeUser/?joke={{joke[2]}}" class="trash">
+                                        <span class="glyphicon glyphicon-trash"></span>
+                                    </a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
                 </div>
             </div>
-            <div class="col-sm-2 well">
-                <div class="thumbnail">
-                    <p>Upcoming Events:</p>
-                    <img src="paris.jpg" alt="Paris" width="400" height="300">
-                    <p><strong>Paris</strong></p>
-                    <p>Fri. 27 November 2015</p>
-                    <button class="btn btn-primary">Info</button>
-                </div>
+            <div class="col-sm-3 well">
+                <h4>Contenu sponsorisé</h4>
                 <div class="well pub">
-
                     <img src="{{ url_for('static', filename='img/evier.jpg') }}" alt="">
+                    <p>Les médecins la déteste ! Elle a perdu 20... <span style="color: blue;">voir plus</span></p>
                 </div>
                 <div class="well pub">
-
-                    <img src="{{ url_for('static', filename='img/Herve.jpg') }}" alt="">
+                    <img src="{{ url_for('static', filename='img/THUUUNE.jpg') }}" alt="">
+                    <p>Découvrez comment gagner plein d'argent en ligne ! <a href="https://www.youtube.com/watch?v=dQw4w9WgXcQ">voir plus</a></p>
                 </div>
             </div>
         </div>
