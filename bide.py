@@ -4,25 +4,25 @@ import sqlite3
 app = Flask(__name__)
 
 
-@app.route('/')
+@app.route("/")
 def my_form():
-    co = sqlite3.connect('users.db')
+    co = sqlite3.connect("users.db")
     c = co.cursor()
 
     users = []
     i = 1
-    for vals in c.execute('SELECT * FROM users ORDER BY points DESC'):
+    for vals in c.execute("SELECT * FROM users ORDER BY points DESC"):
         users.append(((vals[0], vals[1]), i))
         i += 1
 
     co.close()
 
-    return render_template('index.html', users=users)
+    return render_template("index.html", users=users)
 
 
-@app.route('/jokes')
+@app.route("/jokes")
 def jokes():
-    co = sqlite3.connect('users.db')
+    co = sqlite3.connect("users.db")
     c = co.cursor()
 
     i = 1
@@ -34,10 +34,10 @@ def jokes():
     # Save (commit) the changes
     co.close()
 
-    return render_template('jokes.html', jokes=jokes)
+    return render_template("jokes.html", jokes=jokes)
 
 
-@app.route("/adduser", methods=['POST'])
+@app.route("/adduser", methods=["POST"])
 def insert_user():
     username = request.form.get("Name")
     if username == "":
@@ -53,7 +53,7 @@ def insert_user():
     return redirect("/", code=302)
 
 
-@app.route("/addjoke", methods=['POST'])
+@app.route("/addjoke", methods=["POST"])
 def insert_joke():
     joke = request.form.get("Joke")
     if joke == "":
@@ -63,7 +63,7 @@ def insert_joke():
     c = co.cursor()
 
     pk = int(c.execute("SELECT MAX(pk) FROM jokes").fetchall()[0][0])
-    c.execute("INSERT INTO jokes VALUES (?, 0, ?)", (joke, pk+1))
+    c.execute("INSERT INTO jokes VALUES (?, 0, ?)", (joke, pk + 1))
 
     co.commit()
     co.close()
@@ -71,7 +71,7 @@ def insert_joke():
     return redirect("/jokes", code=302)
 
 
-@app.route("/vote", methods=['GET'])
+@app.route("/vote", methods=["GET"])
 def vote_joke():
     joke_pk = request.args.get("joke")
     action = request.args.get("action")
@@ -83,9 +83,9 @@ def vote_joke():
 
     base_points = c.execute("SELECT points FROM jokes WHERE pk=?", (joke_pk,))
     if action == "plus":
-        points = int(base_points.fetchall()[0][0]+1)
+        points = int(base_points.fetchall()[0][0] + 1)
     elif action == "moins":
-        points = int(base_points.fetchall()[0][0]-1)
+        points = int(base_points.fetchall()[0][0] - 1)
     else:
         c.close()
         return redirect("/jokes", code=302)
@@ -98,31 +98,30 @@ def vote_joke():
     return redirect("/jokes", code=302)
 
 
-@app.route("/ModPoints", methods=['GET'])
+@app.route("/ModPoints", methods=["GET"])
 def addPoints():
-    user = request.args.get('user')
-    action = request.args.get('action')
+    user = request.args.get("user")
+    action = request.args.get("action")
 
     co = sqlite3.connect("users.db")
     c = co.cursor()
 
-    base_points = c.execute("SELECT points FROM users WHERE nom=?", (user,))
+    base_points = c.execute("SELECT points FROM users WHERE username=?", (user,))
 
     if action == "plus":
-        base_points = base_points.fetchall()[0][0]+1
+        base_points = base_points.fetchall()[0][0] + 1
     elif action == "moins":
-        base_points = base_points.fetchall()[0][0]-1
+        base_points = base_points.fetchall()[0][0] - 1
     else:
         co.close()
         return redirect("/", code=302)
 
-    c.execute(
-        "UPDATE users SET points=? where nom=?", (base_points, user))
+    c.execute("UPDATE users SET points=? where username=?", (base_points, user))
     co.commit()
     co.close()
 
     return redirect("/", code=302)
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     app.run(debug=True)
