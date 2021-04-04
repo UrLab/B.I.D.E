@@ -61,8 +61,12 @@ def insert_joke():
 
     co = sqlite3.connect("users.db")
     c = co.cursor()
+    pk = c.execute("SELECT MAX(pk) FROM jokes").fetchall()[0][0]
+    if pk is None:
+        pk = 0
+    else:
+        pk = int(pk)
 
-    pk = int(c.execute("SELECT MAX(pk) FROM jokes").fetchall()[0][0])
     c.execute("INSERT INTO jokes VALUES (?, 0, ?)", (joke, pk + 1))
 
     co.commit()
